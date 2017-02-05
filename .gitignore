@@ -4,6 +4,7 @@
 /storage/*.key
 /vendor
 /.idea
-Homestead.json
-Homestead.yaml
 .env
+
+# Mac OSX specific
+.DS_Store
