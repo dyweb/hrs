@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Member;
 
 class MemberController extends Controller
 {
@@ -13,7 +14,8 @@ class MemberController extends Controller
      */
     public function index()
     {
-        //
+        $members = Member::all();
+        return view('index', ['members' => $members]);
     }
 
     /**
@@ -23,7 +25,7 @@ class MemberController extends Controller
      */
     public function create()
     {
-        //
+        return view('create');
     }
 
     /**
@@ -34,7 +36,11 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $member = new Member;
+        $member->fill($request->all());
+        $member->save();
+
+        return redirect()->route('members.index');
     }
 
     /**
@@ -44,8 +50,9 @@ class MemberController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($id)
-    {
-        //
+    {   
+        $member = Member::findOrFail($id);
+        return view('show', ['member' => $member]);
     }
 
     /**
@@ -56,7 +63,7 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        //
+        // TODO: allow edition ? 
     }
 
     /**
@@ -68,7 +75,7 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        // TODO: allow edition ?
     }
 
     /**
@@ -79,6 +86,7 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Member::destroy($id);
+        return redirect()->route('members.index');
     }
 }
