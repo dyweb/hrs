@@ -19,3 +19,4 @@ Auth::routes();
 
 // Controller for home page
 Route::get('/home', 'HomeController@index');
+Route::get('/', 'HomeController@index');

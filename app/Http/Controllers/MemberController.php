@@ -10,6 +10,7 @@ class MemberController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('admin')->except(['index', 'show']);
     }
 
     /**
@@ -30,7 +31,6 @@ class MemberController extends Controller
      */
     public function create()
     {
-        // TODO: admin only
         return view('create');
     }
 
@@ -42,7 +42,6 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO: admin only
         $member = new Member;
         $member->fill($request->all());
         $member->save();
@@ -70,7 +69,8 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        // TODO: admin only
+        $member = Member::findOrFail($id);
+        return view('edit', ['member' => $member]);
     }
 
     /**
@@ -82,7 +82,11 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // TODO: admin only
+        $member = Member::findOrFail($id);
+        $member->fill($request->all());
+        $member->save();
+
+        return redirect()->route('members.index');
     }
 
     /**
@@ -93,7 +97,6 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
-        // TODO: admin only
         Member::destroy($id);
         return redirect()->route('members.index');
     }
