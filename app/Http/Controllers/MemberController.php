@@ -7,6 +7,11 @@ use App\Member;
 
 class MemberController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -25,6 +30,7 @@ class MemberController extends Controller
      */
     public function create()
     {
+        // TODO: admin only
         return view('create');
     }
 
@@ -36,6 +42,7 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
+        // TODO: admin only
         $member = new Member;
         $member->fill($request->all());
         $member->save();
@@ -63,7 +70,7 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        // TODO: allow edition ? 
+        // TODO: admin only
     }
 
     /**
@@ -75,7 +82,7 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // TODO: allow edition ?
+        // TODO: admin only
     }
 
     /**
@@ -86,6 +93,7 @@ class MemberController extends Controller
      */
     public function destroy($id)
     {
+        // TODO: admin only
         Member::destroy($id);
         return redirect()->route('members.index');
     }

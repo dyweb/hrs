@@ -11,8 +11,11 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
+// Controller for the CRUD of member information
 Route::resource('members', 'MemberController');
+
+// A collection of controllers on auth system
+Auth::routes();
+
+// Controller for home page
+Route::get('/home', 'HomeController@index');
