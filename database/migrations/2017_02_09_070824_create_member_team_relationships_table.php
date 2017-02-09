@@ -21,7 +21,7 @@ class CreateMemberTeamRelationshipsTable extends Migration
             $table->foreign('member_id')->references('id')->on('members')->onDelete('cascade');
 
             $table->increments('id');
-            $table->unsignedInteger('position')->default(App\Team::POSITION_MEMBER);
+            $table->unsignedInteger('position')->default(App\Models\Team::POSITION_MEMBER);
             $table->timestamps();
         });
     }

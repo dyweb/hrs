@@ -1,6 +1,6 @@
 <?php
 
-$factory->define(App\Member::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\Member::class, function (Faker\Generator $faker) {
     static $password;
 
     return [

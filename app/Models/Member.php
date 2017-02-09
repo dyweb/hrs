@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Member
+ * App\Models\Member
  *
  * @const GENDER_MALE
  * @const GENDER_FEMALE
@@ -27,7 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $nickname
  * @property string $remark
  *
- * @property-read \App\Team[] $teams
+ * @property-read \App\Models\Team[] $teams
  **/
 class Member extends Model
 {
@@ -37,6 +37,6 @@ class Member extends Model
 
     public function teams()
     {
-        return $this->belongsToMany('App\Team');
+        return $this->belongsToMany('App\Models\Team');
     }
 }

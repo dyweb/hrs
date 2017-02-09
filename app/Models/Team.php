@@ -1,11 +1,11 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * App\Team
+ * App\Models\Team
  *
  * @const 0 POSITION_PRESIDENT
  * @const 1 POSITION_LEADER
@@ -17,8 +17,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property date $created_at
  * @property date $updated_at
  *
- * @property-read App\Member leader
- * @property-read App\Member[] members
+ * @property-read App\Models\Member leader
+ * @property-read App\Models\Member[] members
  *
  * @method string getPositionName
  *
@@ -38,7 +38,7 @@ class Team extends Model
 
     public function members()
     {
-        return $this->belongsToMany('App\Member');
+        return $this->belongsToMany('App\Models\Member');
     }
 
     public function getPositionName($position)
