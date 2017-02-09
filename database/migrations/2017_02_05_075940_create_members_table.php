@@ -16,8 +16,22 @@ class CreateMembersTable extends Migration
         Schema::create('members', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
+
             $table->string('name');
             $table->string('email')->unique();
+            $table->string('phone');
+            $table->string('qq');
+            $table->string('GitTq');
+            $table->string('GitHub');
+            $table->string('stdId');
+            $table->string('department');
+            $table->string('grade');
+            $table->date('birthday');
+            $table->unsignedInteger('gender');
+            $table->string('QA');
+            $table->string('nickname');
+            $table->string('remark');
+
         });
     }
 
