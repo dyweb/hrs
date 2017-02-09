@@ -11,9 +11,19 @@ class MembersTableSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('members')->insert([
-            'name' => str_random(10),
-            'email' => str_random(10).'@gmail.com',
-        ]);
+        factory(App\Member::class, 30)->create()->each(function ($m){
+            $m->teams()->attach(App\Team::find(rand(0, 5)));
+
+            // Chances are that one member belongs to serveral groups
+            if (rand(0, 1)) {
+                $m->teams()->attach(App\Team::find(rand(0, 5)));
+            }
+        });
+
+        // appoint one member to be leader
+        App\Team::all()->each(function ($team) {
+            $to_be_leader = $team->members->first();
+            $team->members()->updateExistingPivot($to_be_leader->id, ['position' => App\Team::POSITION_LEADER]);
+        });
     }
 }
