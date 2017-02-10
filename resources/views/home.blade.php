@@ -1,9 +1,10 @@
-@extends('layouts.app')
+@extends('app')
 
 @section('content')
 <div class="container">
-    <div class="row">
-        <contract></contract>
-    </div>
+  <div class="row">
+    <create></create>
+    <contract></contract>
+  </div>
 </div>
 @endsection
