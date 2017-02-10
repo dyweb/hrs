@@ -22,8 +22,8 @@ class MembersTableSeeder extends Seeder
 
         // appoint one member to be leader
         App\Models\Team::all()->each(function ($team) {
-            $to_be_leader = $team->members->first();
-            $team->members()->updateExistingPivot($to_be_leader->id, ['position' => App\Models\Team::POSITION_LEADER]);
+            $toBeLeader = $team->members->first();
+            $team->members()->updateExistingPivot($toBeLeader->id, ['position' => App\Models\Team::POSITION_LEADER]);
         });
     }
 }
