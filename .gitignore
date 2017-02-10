@@ -8,3 +8,6 @@
 
 # Mac OSX specific
 .DS_Store
+
+# temporary
+/public
