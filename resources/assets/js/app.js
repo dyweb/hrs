@@ -24,7 +24,7 @@ const app = new Vue({
     addressBook: require('./components/AddressBook.vue'),
     memberForm: require('./components/MemberForm.vue')
   },
-  created () {
+  beforeCreate () {
     // TODO: postpone the timing to ajax
     let self = this
 
@@ -33,6 +33,7 @@ const app = new Vue({
         self.members = memberResp.data
         self.teams = teamResp.data
         // TODO
+
         if (memberResp.status !== 200) { alert("Failed to get members data") }
         if (teamResp.status !== 200) { alert("Failed to get teams data") }
       }));

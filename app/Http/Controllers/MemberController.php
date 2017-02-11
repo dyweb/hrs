@@ -44,24 +44,37 @@ class MemberController extends Controller
     {
         $this->validate($request, [
             'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'qq' => 'required',
+            'email' => 'required|email|unique:members',
+            'phone' => 'required|numeric',
+            'qq' => 'required|numeric',
             'GitTq' => 'required',
             'GitHub' => 'required',
-            'stdId' => 'required',
+            'stdId' => 'required|alpha_num',
             'department' => 'required',
-            'grade' => 'required',
-            'birthday' => 'required',
-            'gender' => 'required',
+            'grade' => 'required|alpha_num',
+            'birthday' => 'required|date',
+            'gender' => 'required|integer',
             'QA' => 'required',
             'nickname' => 'required',
             'remark' => 'required',
         ]);
 
         $member = new Member;
+
+        if (isset($request['teamsId'])){ 
+            $teamsId = $request['teamsId'];
+            unset($request['teamsId']);
+        } else {
+            $teamsId = [];
+        }
+
         $member->fill($request->all());
         $member->save();
+        
+        foreach ($teamsId as $tid){
+            $member->teams()->attach($tid);    
+        }
+
 
         return response('Succeeded', 200);
     }

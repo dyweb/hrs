@@ -1,36 +1,72 @@
 <template>
-  <div>
-    <form @submit.prevent="submit" class="form-inline">
-    <!-- <form action="/members" method="POST"> -->
-      <div v-for="name in inputProps" class="form-group">
-        <label :for="'input-' + name"> {{ name }} </label>
-        <!-- Ugly, however vue don't suppport dynamic typed v-model on input  -->
-        <input v-if="name in inputPropsTypedDate"  
-          v-model="member[name]" 
-          :name="name" :id="'input-' + name" :placeholder="name"
-          type="date"
-        >
-        <input v-else-if="name in inputPropsTypedEmail"
-          v-model="member[name]" 
-          :name="name" :id="'input-' + name" :placeholder="name"
-          type="email"
-        >
-        <input v-else
-          v-model="member[name]" 
-          :name="name" :id="'input-' + name" :placeholder="name"
-          type="text"
-        >
-      </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 col-md-offset-2">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            Register
+          </div>
+          <div class="panel-body">
 
-      <div v-for="(values, name) in selectProps" class="form-group">
-        <label :for="'input-' + name"> {{ name }} </label>
-        <select v-model="member[name]" :name="name" :id="'input-' + name">
-          <option v-for="(opt, index) in values" :value="{ opt: index }"> {{ opt }} </option> 
-        </select>
+            <!-- Form -->
+            <form @submit.prevent="submit" class="form-horizontal">
+              <!-- Regular items -->
+              <div v-for="name in formProps" class="form-group" :class="{ 'has-error': errors[name] }" >
+                <label :for="'input-' + name" class="col-md-4 control-label"> {{ name }} </label>
+              
+                <div class="col-md-6">
+                  <select v-if="name in selectProps"
+                    v-model="member[name]" :name="name" :id="'input-' + name" >
+                    <option v-for="(opt, index) in selectProps[name]" :value="{ opt: index }"> {{ opt }} </option> 
+                  </select>
+                  <input v-else
+                    v-model="member[name]" 
+                    :name="name" :id="'input-' + name" :placeholder="name"
+                    class="form-control" type="text" required 
+                  >
+                  <span v-if="errors[name]" class="text-danger">{{ errors[name][0] }}</span>
+                </div>
+              </div>
+
+              <!-- Teams -->
+              <div class="form-group">
+                <label for="input-teams" class="col-md-4 control-label"> Teams </label>
+                <div class="col-md-6">
+
+                  <div class="btn-group">
+                    <span v-for="team_id in member.teamsId" class="label label-entry">
+                      {{ (teams.find( t => (t.id === team_id) ) || '').name }}
+                    </span>
+                  </div>
+
+                  <div class="btn-group">
+                    <span class="dropdown-toggle" data-toggle="dropdown">
+                      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                    </span>
+                    <ul class="dropdown-menu">
+                      <li v-for="team in teams" @click="member.teamsId.push(team.id)">
+                        <a href="javascript:void(0)">{{ team.name }}</a>
+                      </li>
+                    </ul>
+                  </div>
+
+                </div>
+              </div>
+
+              <!-- Submit -->
+              <div class="form-group text-center">
+                <button type="submit" class="btn btn-primary">
+                  Submit
+                </button>
+              </div>
+
+            </form>
+            <!-- Form Ends -->
+
+          </div>
+        </div>
       </div>
-      
-      <input type="submit">
-    </form>
+    </div>
   </div>
 </template>
 
@@ -38,33 +74,32 @@
   export default {
     data () {
       return {
-        inputProps: [
-          'name', 'email', 'phone', 'qq', 'GitTq', 
-          'Github', 'stdId', 'grade', 'department',
-          'birthday', 'QA', 'nickname', 'remark'
+        formProps: [
+          'name', 'email', 'nickname', 'gender', 'birthday', 
+          'qq', 'phone', 'stdId', 'grade', 'department',
+          'GitTq', 'GitHub','QA', 'remark'
+          // Goto \App\Member for porperties needed
         ],
-        inputPropsTypedDate : ['birthday'],
-        inputPropsTypedEmail : ['email'],
         selectProps: {
            gender: ['Male', 'Female', 'Other']  // order here is according to the constant in `\App\Member`
-        }
+        },
+        errors: []
       }
     },
     props: {
       teams: {
         type: Array,
-        default () {
-          return []
-        }
+        required: true
       },
-      member: {
-        type: Object,
+      member: { // This prop can be skipped when this form is intended to create new member
+        // TODO: set default values to empty 
+        type: Object, 
         default () {
           return {
             name: 'a',
-            email: 'a@b',
-            phone: 'a',
-            qq: 'a',
+            email: 'a@b.c',
+            phone: '123',
+            qq: '456',
             GitTq: 'a',
             GitHub: 'a',
             stdId: 'a',
@@ -73,9 +108,9 @@
             QA: 'a',
             nickname: 'a',
             remark: 'a',
-
-            department: 0,
+            department: 'a',
             gender: 0,
+            teamsId: [1]
           }
         } 
       }
@@ -83,16 +118,31 @@
 
     methods: {
       submit () {
-        axios.post('/members', this.member)
+        let self = this
+
+        axios.post('/members', self.member)
           .then(function (response) {
+            // TODO
             alert("succeeed")
           })
           .catch(function (error) {
-            console.log(error)
-            console.log(error.response.data)
-            // TODO: display rrors
+            if (error.response.status === 422){
+              self.errors = error.response.data
+              // TODO: roll the page to the first error
+            } else {
+              console.log("Unknown error happens!")
+              console.log(error.response.data)
+            }
           })
       },
-    }
+    },
   }
 </script>
+
+<style>
+  .label-entry {
+    color: #777;
+    border: 1px solid #777;
+    background-color: transparent;
+  }
+</style>
