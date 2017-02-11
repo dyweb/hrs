@@ -11,8 +11,9 @@
 |
 */
 
-// Controller for the CRUD of member information
+// Controller for the CRUD of information on members and teams
 Route::resource('members', 'MemberController');
+Route::resource('teams', 'TeamController');
 
 // A collection of controllers on auth system
 Auth::routes();
