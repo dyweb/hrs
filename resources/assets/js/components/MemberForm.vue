@@ -138,11 +138,3 @@
     },
   }
 </script>
-
-<style>
-  .label-entry {
-    color: #777;
-    border: 1px solid #777;
-    background-color: transparent;
-  }
-</style>

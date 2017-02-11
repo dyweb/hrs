@@ -19,10 +19,18 @@ const app = new Vue({
   data: {
     members: [],
     teams: [],
+    view: 'poster'
   },
   components: {
+    appNavbar: require('./components/Navbar.vue'),
+    poster: require('./components/Poster.vue'),
     addressBook: require('./components/AddressBook.vue'),
     memberForm: require('./components/MemberForm.vue')
+  },
+  methods: {
+    roll (view) {
+      this.view = view
+    }
   },
   beforeCreate () {
     // TODO: postpone the timing to ajax

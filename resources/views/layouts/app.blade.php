@@ -21,13 +21,16 @@
   </script>
 </head>
 <body>
-  <div id="app">
-    @include('includes.navbar')
-    @yield('content')
-  </div>
+    @if(Auth::guest())
+      @include('includes.navbar')
+      @yield('content')
+    @else
+      {{-- If not, the navbar will be handled by Vue --}}
 
-  <!-- Scripts -->
-  <script src="/js/app.js"></script>
+      @yield('app')
+      <script src="/js/app.js"></script>
+      
+    @endif
 
 </body>
 </html>

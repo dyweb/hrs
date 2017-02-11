@@ -7,3 +7,17 @@
 
 // Bootstrap
 @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+
+// App misc
+.label-entry {  // mimic .label in bootstrap 
+    color: #777;
+    border: 1px solid #777;
+    background-color: transparent;
+}
+
+.view-enter-active, .view-leave-active {
+  transition: opacity .3s ease;
+}
+.view-enter, .view-leave-active {
+  opacity: 0;
+}
