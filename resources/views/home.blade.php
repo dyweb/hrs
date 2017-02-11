@@ -1,10 +1,10 @@
-@extends('app')
+@extends('layouts.app')
 
 @section('content')
 <div class="container">
   <div class="row">
-    <create></create>
-    <contract></contract>
+    <member-form></member-form>
+    {{-- <address-book></address-book> --}}
   </div>
 </div>
 @endsection

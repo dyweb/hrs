@@ -15,13 +15,26 @@ require('./bootstrap');
 
 
 const app = new Vue({
-    el: '#app',
-    data: {
-    },
-    components: {
-        example: require('./components/Example.vue'),
-        contract: require('./components/Contract.vue')
-    }
-});
+  el: '#app',
+  data: {
+    members: [],
+    teams: [],
+  },
+  components: {
+    addressBook: require('./components/AddressBook.vue'),
+    memberForm: require('./components/MemberForm.vue')
+  },
+  created () {
+    // TODO: postpone the timing to ajax
+    let self = this
 
-console.log(app);
+    axios.all([(function() {return axios.get('/members')})(), (function () {return axios.get('/teams')})()])
+      .then(axios.spread(function (memberResp, teamResp) {
+        self.members = memberResp.data
+        self.teams = teamResp.data
+        // TODO
+        if (memberResp.status !== 200) { alert("Failed to get members data") }
+        if (teamResp.status !== 200) { alert("Failed to get teams data") }
+      }));
+  }
+});

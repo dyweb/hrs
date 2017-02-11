@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-12">
         <table  class="table table-bordered table-hover">
-          <thead>
+          <thead v-if="members">
             <tr>
               <td v-for="(value, key) in members[0]">{{ key }}</td>
             </tr>
@@ -21,22 +21,6 @@
 
 <script>
   export default {
-    data () {
-      return {
-        members: []
-      } 
-    },
-    created () {
-      // TODO: The best timeing to ajax?
-      let self = this
-
-      axios.get('/members')
-        .then(function (response) { 
-          self.members = response.data;
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-    }
+    props: ['members']
   }
 </script>

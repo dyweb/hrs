@@ -42,11 +42,28 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required',
+            'phone' => 'required',
+            'qq' => 'required',
+            'GitTq' => 'required',
+            'GitHub' => 'required',
+            'stdId' => 'required',
+            'department' => 'required',
+            'grade' => 'required',
+            'birthday' => 'required',
+            'gender' => 'required',
+            'QA' => 'required',
+            'nickname' => 'required',
+            'remark' => 'required',
+        ]);
+
         $member = new Member;
         $member->fill($request->all());
         $member->save();
 
-        return redirect()->route('members.index');
+        return response('Succeeded', 200);
     }
 
     /**

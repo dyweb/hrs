@@ -35,6 +35,8 @@ class Member extends Model
     const GENDER_FEMALE = 1;
     const GENDER_OTHER = 2;
 
+    protected $guarded = [];
+    
     public function teams()
     {
         return $this->belongsToMany('App\Models\Team');
