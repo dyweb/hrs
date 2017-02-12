@@ -24,6 +24,7 @@ const app = new Vue({
   components: {
     appNavbar: require('./components/Navbar.vue'),
     poster: require('./components/Poster.vue'),
+    empty: require('./components/Empty.vue'),
     addressBook: require('./components/AddressBook.vue'),
     memberForm: require('./components/MemberForm.vue')
   },
