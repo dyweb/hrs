@@ -19,5 +19,9 @@ Route::resource('teams', 'TeamController');
 Auth::routes();
 
 // Controller for home page
-Route::get('/home', 'HomeController@index');
-Route::get('/', 'HomeController@index');
+Route::get('/', 'HomeController@index')->name('home');
+
+
+// Controller for enrollment
+Route::get('enroll', 'EnrollController@create')->name('enroll');
+Route::post('enroll', 'EnrollController@store');

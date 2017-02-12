@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use App\Models\Member;
 
 class MemberController extends Controller
@@ -10,7 +11,34 @@ class MemberController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        $this->middleware('admin')->except(['index', 'show']);
+        $this->middleware('admin')->except(['index', 'show', 'create']);
+    }
+
+    /**
+     * Get a validator for a request of creating a `App\Models\Member`.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    public static function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required',
+            'email' => 'required|email|unique:members',
+            'nickname' => 'required',
+            'phone' => 'required|numeric',
+            'qq' => 'required|numeric',
+            'birthday' => 'required|date',
+            'stdId' => 'required|alpha_num',
+            'department' => 'required',
+            'grade' => 'required|alpha_num',
+            'gender' => 'required|integer',
+            'GitTq' => 'required',
+            'GitHub' => 'required',
+            'QA' => 'required',
+            'remark' => 'required',
+        ]);
+        // TODO: some should be given a default value?
     }
 
     /**
@@ -37,27 +65,16 @@ class MemberController extends Controller
     /**
      * Store a newly created resource in storage.
      *
+     * Besides properties defined in database schema,
+     * an array of teams id can be include in the request
+     * to denote which teams this member shoulde be added to.
+     *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
-            'name' => 'required',
-            'email' => 'required|email|unique:members',
-            'phone' => 'required|numeric',
-            'qq' => 'required|numeric',
-            'GitTq' => 'required',
-            'GitHub' => 'required',
-            'stdId' => 'required|alpha_num',
-            'department' => 'required',
-            'grade' => 'required|alpha_num',
-            'birthday' => 'required|date',
-            'gender' => 'required|integer',
-            'QA' => 'required',
-            'nickname' => 'required',
-            'remark' => 'required',
-        ]);
+        $this->validator($request->all())->validate();
 
         $member = new Member;
 
