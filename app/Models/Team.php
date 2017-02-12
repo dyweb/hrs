@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property date $created_at
  * @property date $updated_at
  *
- * @property-read App\Models\Member leader
+ * @property-read App\Models\Member[] leaders
  * @property-read App\Models\Member[] members
  *
  * @method string getPositionName
@@ -28,12 +28,10 @@ class Team extends Model
     const POSITION_PRESIDENT = 0;
     const POSITION_LEADER = 1;
     const POSITION_MEMBER = 2;
-    const POSITION_HR = 3;
 
-    public function leader()
+    public function getLeadersAttribute()
     {
-        # fixme: ambiguous logic
-        return $this->members->where('position', '<=', POSITION_LEADER)->first();
+        return $this->members->where('position', '<=', POSITION_LEADER);
     }
 
     public function members()
@@ -43,6 +41,6 @@ class Team extends Model
 
     public function getPositionName($position)
     {
-        return ['负责人', '组长', '组员', '人资'][$position];
+        return ['负责人', '组长', '组员'][$position];
     }   
 }

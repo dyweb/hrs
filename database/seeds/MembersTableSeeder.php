@@ -25,5 +25,6 @@ class MembersTableSeeder extends Seeder
             $toBeLeader = $team->members->first();
             $team->members()->updateExistingPivot($toBeLeader->id, ['position' => App\Models\Team::POSITION_LEADER]);
         });
+
     }
 }

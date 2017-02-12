@@ -27,6 +27,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $nickname
  * @property string $remark
  *
+ * @property-read \App\Models\User $user
  * @property-read \App\Models\Team[] $teams
  **/
 class Member extends Model
@@ -37,8 +38,14 @@ class Member extends Model
 
     protected $guarded = [];
     
+    public function user()
+    {
+        return $this->hasOne('App\Models\User');
+    }
+
     public function teams()
     {
         return $this->belongsToMany('App\Models\Team');
     }
+
 }

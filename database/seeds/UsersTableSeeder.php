@@ -12,17 +12,24 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         // admin user
+        // an extra member is needed to create new user
+        $admin = factory(App\Models\Member::class)->create([
+            'email' => 'admin@yeah.net'
+        ]);
+        
         DB::table('users')->insert([
-            'name' => 'admin',
-            'email' => 'the_admin_guy@yeah.net',
+            'email' => $admin->email,
             'password' => bcrypt('glgjssy'),
             'is_admin' => true
         ]);
 
         // common user
+        $common = factory(App\Models\Member::class)->create([
+            'email' => 'common@yeah.net'
+        ]);
+
         DB::table('users')->insert([
-            'name' => 'alice',
-            'email' => 'the_ordinary_guy@yeah.net',
+            'email' => $common->email,
             'password' => bcrypt('qyhfqbz'),
             'is_admin' => false
         ]);
