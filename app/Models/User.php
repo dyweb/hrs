@@ -29,7 +29,7 @@ class User extends Authenticatable
 
     public function member() 
     {
-        return $this->belongsTo('App\Models\Member', 'email', 'email');
+        return $this->belongsTo(Member::class, 'email', 'email');
     }
     
     public function getNameAttribute() 

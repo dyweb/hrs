@@ -36,7 +36,7 @@ class Team extends Model
 
     public function members()
     {
-        return $this->belongsToMany('App\Models\Member');
+        return $this->belongsToMany(Member::class);
     }
 
     public function getPositionName($position)

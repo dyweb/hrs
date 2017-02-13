@@ -45,12 +45,12 @@ class Member extends Model
 
     public function user()
     {
-        return $this->hasOne('App\Models\User', 'email', 'email');
+        return $this->hasOne(User::class, 'email', 'email');
     }
 
     public function teams()
     {
-        return $this->belongsToMany('App\Models\Team');
+        return $this->belongsToMany(Team::class);
     }
 
     /**
