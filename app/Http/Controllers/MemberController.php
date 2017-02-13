@@ -48,7 +48,8 @@ class MemberController extends Controller
      */
     public function index()
     {
-        $members = Member::all();
+        // TODO: returns too much?
+        $members = Member::has('teams')->with('teams')->get();
         return $members->toJson();
     }
 

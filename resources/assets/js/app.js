@@ -14,19 +14,19 @@ require('./bootstrap');
  */
 
 
-const app = new Vue({
+var app = new Vue({
   el: '#app',
   data: {
     members: [],
     teams: [],
-    view: 'poster'
+    view: 'addressBook'
   },
   components: {
     appNavbar: require('./components/Navbar.vue'),
     poster: require('./components/Poster.vue'),
     empty: require('./components/Empty.vue'),
     addressBook: require('./components/AddressBook.vue'),
-    memberForm: require('./components/MemberForm.vue')
+    memberForm: require('./components/MemberForm.vue'),
   },
   methods: {
     roll (view) {

@@ -17,7 +17,7 @@
                 <div class="col-md-6">
                   <select v-if="name in selectProps"
                     v-model="member[name]" :name="name" :id="'input-' + name" >
-                    <option v-for="(opt, index) in selectProps[name]" :value="{ opt: index }"> {{ opt }} </option> 
+                    <option v-for="(opt, index) in selectProps[name]" :value="index"> {{ opt }} </option> 
                   </select>
                   <input v-else
                     v-model="member[name]" 
