@@ -66,10 +66,12 @@ class MemberController extends Controller
         }
 
         // TODO: transaction
+        $teamsID = [];
         foreach ($teams as $team) {
-            $member->teams()->attach($team->id);
+            array_push($teamsID, $team['id']);
         }
 
+        $member->teams()->sync($teamsID);
         $member->fill($data);
         $member->save();
 
@@ -161,6 +163,23 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required|email',  // email is not required to be unique when updating
+            'nickname' => 'required',
+            'phone' => 'required|numeric',
+            'qq' => 'required|numeric',
+            'birthday' => 'required|date',
+            'stdId' => 'required|alpha_num',
+            'department' => 'required',
+            'grade' => 'required|alpha_num',
+            'gender' => 'required|integer',
+            'GitTq' => 'required',
+            'GitHub' => 'required',
+            'QA' => 'required',
+            'remark' => 'required',
+            'teams' => 'sometimes|array'
+        ]);
         // TODO: add etag check
         $this->saveMember(Member::findOrFail($id), $request->all());
 
