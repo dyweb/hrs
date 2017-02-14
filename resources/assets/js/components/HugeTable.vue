@@ -9,7 +9,7 @@
         </thead>
         <tbody>
           <tr v-for="(d, ind) in data" @click="$emit('dataClick', ind)">
-            <td v-for="col in fixedColumns">{{ d[col] }}</td>
+            <td v-for="col in fixedColumns">{{ format(col, d[col]) }}</td>
           </tr>
         </tbody>
       </table> 
@@ -23,7 +23,7 @@
           </thead>
           <tbody>
             <tr v-for="(d, ind) in data" @click="$emit('dataClick', ind)">
-              <td v-for="col in showedColumns"> {{ d[col] }}</td>
+              <td v-for="col in showedColumns"> {{ format(col, d[col]) }}</td>
             </tr>
           </tbody>
         </table>
@@ -37,7 +37,7 @@
     name: 'hugeTable',
     props: {
       allColumns: {
-        type: Array,  // Array of String
+        type: Array,  // Array of String, denoting both the column head and the Object prop
         default: []
       },
       fixedColumns: {
@@ -51,8 +51,22 @@
       data: {
         type: Array,  // Array of Object
         required: true
+      },
+      formatters: {
+        type: Object,  
+        default () {
+          return {
+            foo: (val) => (val.toUpperCase()) // demo 
+          }
+        }
       }
     },
+    methods: {
+      format (name, val) {
+        let func = this.formatters[name]
+        return func ? func(val) : val
+      }
+    }
   }
 </script>
 

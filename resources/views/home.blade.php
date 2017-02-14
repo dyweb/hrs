@@ -6,19 +6,12 @@
     <span slot="username">{{ Auth::user()->name }}</span>
     <span slot="csrf-field">{{ csrf_field() }}</span>
   </app-navbar>
-  {{-- 
-    Here slot is used to pass blade-stuff into Vue.
-    However this is far from a cure-all when combining Vue and blde for
-    1. Passing things with too complex a structure will cause the separation of logic
-    2. Can't handle template logic (condition, loop, ...) ( solved by js )
-    3. Tags grow with component hierarchy
-  --}}
 
   {{-- <transition name="transition-view"> --}}
     <poster v-if="view == 'poster'"> </poster>
     
     <address-book v-if="view == 'addressBook'"
-      :members="members" :teams="teams"
+      :members="members" :teams="teams" :all-columns="memberProps" :formatters="memberFormatters"
     > 
     </address-book>
 
@@ -32,15 +25,17 @@
 </div>
 
 <script>
-  window.isGuest = Boolean({{ Auth::check() }})
-  window.isAdmin = Boolean({{ Auth::user()->is_admin }})
+  window.bladeVar = {
+    isGuest: Boolean({{ Auth::check() }}),
 
-  {{--
-    Use js to pass blade-stuff into Vue, 
-    these values will be assigned to Vue instance
-    and solves the problems of using slot,
-    but if `Window` contains property with same name someday,
-    we will have to rewrite it.
-  --}}
+    @if (Auth::check()) 
+      isAdmin: Boolean({{ Auth::user()->is_admin }}),
+      user: {!! Auth::user()->toJson() !!},
+      members: {!! App\Models\Member::has('user')->with('teams')->get()->toJson() !!},
+      teams: {!! App\Models\Team::all()->toJson() !!}
+    @endif
+    // TODO: too big the json, many are duplicated
+  }
+
 </script>
 @endsection

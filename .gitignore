@@ -9,7 +9,7 @@
 # Mac OSX specific
 .DS_Store
 
-# temporary
 /public/js
 /public/css
 /public/fonts
+/public/mix-manifest.json

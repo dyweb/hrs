@@ -42,14 +42,26 @@ class MemberController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of member.
+     * Members not approved (i.e. has no user accout related) not included
+     * 
+     * @return json in the format of 
+     * {
+     *   {
+     *      'id' : xxxx
+     *       .... all attribute of Member class ...
+     *      'teams' : {
+     *          'id' : xxxxx
+     *          .... all attribute of Teams ....
+     *       }
+     *   }
+     * }
      *
-     * @return \Illuminate\Http\Response
      */
     public function index()
     {
         // TODO: returns too much?
-        $members = Member::has('teams')->with('teams')->get();
+        $members = Member::has('user')->with('teams')->get();
         return $members->toJson();
     }
 

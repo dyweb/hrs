@@ -14,13 +14,24 @@ require('./bootstrap');
  */
 
 
-var app = new Vue({
+const app = new Vue({
   el: '#app',
   data: {
     members: [],
+    memberProps: [
+      'id', 'name', 'email', 'nickname', 'gender', 'birthday', 
+      'qq', 'phone', 'stdId', 'grade', 'department',
+      'GitTq', 'GitHub','QA', 'remark', 'created_at', 
+      'teams' // When rendering, order of this array counts!
+    ],
+    memberFormatters: {
+      gender (val) { return ['Male', 'Female', 'Others'][val] },  // according to `App\Models\Member` constants
+      teams (val) { return val.length ? Array.from(val, t=>t.name).join(', ') : 'No Team'}
+    },
     teams: [],
+
     view: 'poster',
-    viewkwargs: {} 
+    viewkwargs: {}
   },
   components: {
     appNavbar: require('./components/Navbar.vue'),
@@ -31,29 +42,31 @@ var app = new Vue({
   },
   methods: {
     rollView (view, kwargs) {
-      console.assert(typeof kwargs === 'object', "Only `Object` should be passed as `kwargs` in event 'rollView'")
       this.view = view
-      this.viewkwargs = kwargs
+
+      if ( kwargs ) {
+        console.assert(typeof kwargs === 'object', 
+          "Only `Object` not `" + typeof kwargs + "` should be passed as `kwargs` in event 'rollView'")
+        this.viewkwargs = kwargs
+      }
     }
   },
-  beforeCreate () {
-    // TODO: postpone the timing to ajax
-    let self = this
+  // beforeCreate () {
+  //   // TODO: postpone the timing to ajax
+  //   let self = this
 
-    axios.all([(function() {return axios.get('/members')})(), (function () {return axios.get('/teams')})()])
-      .then(axios.spread(function (memberResp, teamResp) {
-        self.members = memberResp.data
-        self.teams = teamResp.data
-        // TODO
+  //   axios.all([(function() {return axios.get('/members')})(), (function () {return axios.get('/teams')})()])
+  //     .then(axios.spread(function (memberResp, teamResp) {
+  //       self.members = memberResp.data
+  //       self.teams = teamResp.data
+  //       // TODO
 
-        if (memberResp.status !== 200) { alert("Failed to get members data") }
-        if (teamResp.status !== 200) { alert("Failed to get teams data") }
-      }));
-  },
+  //       if (memberResp.status !== 200) { alert("Failed to get members data") }
+  //       if (teamResp.status !== 200) { alert("Failed to get teams data") }
+  //     }));
+  // },
   created () {
-     ['isGuest', 'isAdmin'].forEach(function (name) {
-      this[name] = window[name]
-      delete window[name]
-     })
+    Object.assign(this, window.bladeVar)
+    delete window.bladeVar
   }
 });

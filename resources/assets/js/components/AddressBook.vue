@@ -42,9 +42,10 @@
 
     <!-- Table -->
     <huge-table
-      :allColumns=allColumns
+      :allColumns="allColumns"
       :fixedColumns="fixedColumns"
       :showedColumns="showedColumns"
+      :formatters="formatters"
       :data="membersToDisplay"
       @dataClick="showProfile"
     ></huge-table>
@@ -54,17 +55,12 @@
 
 <script>
   export default {
-    props: ['members', 'teams'],
+    props: ['members', 'teams', 'allColumns', 'formatters'],
     data () {
       return {
-        allColumns: [
-          'name', 'email', 'nickname', 'gender', 'birthday', 
-          'qq', 'phone', 'stdId', 'grade', 'department',
-          'GitTq', 'GitHub','QA', 'remark', 'id'
-        ],
-        fixedBools: [],  // calced when mounted to avoid hardcoding a long bool array
-        showedBools: [],
-        teamToDisplay: { id:0, name:'All' }
+        fixedBools: [],   // Tow boolean array representing a column's display state
+        showedBools: [],    // calced when mounted to avoid hardcoding a long bool array
+        teamToDisplay: { id:0, name:'All' }  // Team filter, show all by default
       }
     },
     mounted () {
@@ -72,8 +68,8 @@
       this.showedBools = this.toBools([
           'name', 'email', 'gender', 'birthday', 
           'qq', 'phone', 'stdId', 'grade', 'department',
-          'GitTq', 'GitHub','QA', 'remark', 'id'
-        ])
+          'GitTq', 'GitHub','QA', 'remark', 'id', 'teams' 
+        ])  // order not concerned, displaying according to `allColumns`
     },
     computed: {
       fixedColumns () {

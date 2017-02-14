@@ -12,6 +12,11 @@ class MembersTableSeeder extends Seeder
     public function run()
     {
         factory(App\Models\Member::class, 30)->create()->each(function ($m){
+            // Attach user account for each member
+            $m->user()->create([
+                'password' => bcrypt('qwerty'),
+            ]);
+
             $m->teams()->attach(App\Models\Team::find(rand(0, 5)));
 
             // Chances are that one member belongs to serveral groups
