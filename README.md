@@ -9,11 +9,12 @@ Dongyue HR System
 - [ ] Synchronize with the team address list 
 
 ## Deployment
-  composer install
-  npm install
-  cp .env.example .env
-  php artisan key:generate
-  php artisan migrate --seed
-  npm run dev
-  // go to 'localhost:8000'
-  // password can be found in UsersTableSeeder
+
+    composer install
+    npm install
+    cp .env.example .env
+    php artisan key:generate
+    php artisan migrate --seed
+    npm run dev
+    // go to 'localhost:8000'
+    // password can be found in UsersTableSeeder
