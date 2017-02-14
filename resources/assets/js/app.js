@@ -21,8 +21,13 @@ const app = new Vue({
     memberProps: [
       'id', 'name', 'email', 'nickname', 'gender', 'birthday', 
       'qq', 'phone', 'stdId', 'grade', 'department',
-      'GitTq', 'GitHub','QA', 'remark', 'created_at', 
+      'GitTq', 'GitHub','QA', 'remark', 'created_at',
       'teams' // When rendering, order of this array counts!
+    ],
+    memberCreateProps: [  // props needed when creating new member
+      'name', 'email', 'nickname', 'gender', 'birthday', 
+      'qq', 'phone', 'stdId', 'grade', 'department',
+      'GitTq', 'GitHub','QA', 'remark'
     ],
     memberFormatters: {
       gender (val) { return ['Male', 'Female', 'Others'][val] },  // according to `App\Models\Member` constants
@@ -34,6 +39,7 @@ const app = new Vue({
     viewkwargs: {}
   },
   components: {
+    prompt: require('./components/Prompt.vue'),
     appNavbar: require('./components/Navbar.vue'),
     poster: require('./components/Poster.vue'),
     addressBook: require('./components/AddressBook.vue'),
@@ -43,29 +49,38 @@ const app = new Vue({
   methods: {
     rollView (view, kwargs) {
       this.view = view
-
       if ( kwargs ) {
         console.assert(typeof kwargs === 'object', 
           "Only `Object` not `" + typeof kwargs + "` should be passed as `kwargs` in event 'rollView'")
-        this.viewkwargs = kwargs
+        this.viewkwargs = _.cloneDeep(kwargs)
       }
+    },
+    format (name, val) {
+        let func = this.memberFormatters[name]
+        return func ? func(val) : val
+    },
+    refreshMembers () {
+      let self = this
+
+      axios.get('/members')
+        .then(function (resp) {
+          self.members = resp.data
+          if (resp.status !== 200) { console.log("Failed to refresh members data") }
+        });
+    },
+    refreshTeams () {
+      let self = this
+      axios.get('/teams')
+        .then(function (resp) {
+          self.members = resp.data
+          if (resp.status !== 200) { console.log("Failed to refresh teams data") }
+        });
     }
   },
-  // beforeCreate () {
-  //   // TODO: postpone the timing to ajax
-  //   let self = this
-
-  //   axios.all([(function() {return axios.get('/members')})(), (function () {return axios.get('/teams')})()])
-  //     .then(axios.spread(function (memberResp, teamResp) {
-  //       self.members = memberResp.data
-  //       self.teams = teamResp.data
-  //       // TODO
-
-  //       if (memberResp.status !== 200) { alert("Failed to get members data") }
-  //       if (teamResp.status !== 200) { alert("Failed to get teams data") }
-  //     }));
-  // },
   created () {
+    // this.refreshMember()
+    // this.refreshTeam()
+
     Object.assign(this, window.bladeVar)
     delete window.bladeVar
   }

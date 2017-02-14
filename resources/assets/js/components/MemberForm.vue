@@ -4,7 +4,7 @@
       <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-default">
           <div class="panel-heading">
-            Register
+            {{ panelHeading }}
           </div>
           <div class="panel-body">
 
@@ -17,7 +17,7 @@
                 <div class="col-md-6">
                   <select v-if="name in selectProps"
                     v-model="member[name]" :name="name" :id="'input-' + name" >
-                    <option v-for="(opt, index) in selectProps[name]" :value="index"> {{ opt }} </option> 
+                    <option v-for="val in selectProps[name]" :value="val"> {{ format(name, val) }} </option>
                   </select>
                   <input v-else
                     v-model="member[name]" 
@@ -34,8 +34,9 @@
                 <div class="col-md-6">
 
                   <div class="btn-group">
-                    <span v-for="team_id in member.teamsId" class="label label-entry">
-                      {{ (teams.find( t => (t.id === team_id) ) || '').name }}
+                    <span v-for="team in member.teams" class="label label-entry">
+                      {{ team.name }} &nbsp;
+                      <span class="glyphicon glyphicon-remove" @click="removeTeam(team)"></span>
                     </span>
                   </div>
 
@@ -44,7 +45,7 @@
                       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
                     </span>
                     <ul class="dropdown-menu">
-                      <li v-for="team in teams" @click="member.teamsId.push(team.id)">
+                      <li v-for="team in teams" @click="addTeam(team)">
                         <a href="javascript:void(0)">{{ team.name }}</a>
                       </li>
                     </ul>
@@ -72,20 +73,6 @@
 
 <script>
   export default {
-    data () {
-      return {
-        formProps: [
-          'name', 'email', 'nickname', 'gender', 'birthday', 
-          'qq', 'phone', 'stdId', 'grade', 'department',
-          'GitTq', 'GitHub','QA', 'remark'
-          // Goto \App\Member for porperties needed
-        ],
-        selectProps: {
-           gender: ['Male', 'Female', 'Other']  // order here is according to the constant in `\App\Member`
-        },
-        errors: []
-      }
-    },
     props: {
       teams: {
         type: Array,
@@ -110,20 +97,59 @@
             remark: 'a',
             department: 'a',
             gender: 0,
-            teamsId: [1]
           }
         } 
+      },
+      formProps: Array,
+      format: Function,
+      mode: {
+        type: String,
+        default: 'create', // create | edit
+        validator (v) {
+          return v === 'create' || v === 'edit'
+        }
       }
     },
-
+    data () {
+      return {
+        selectProps: {
+           gender: [0, 1, 2]  // order here is according to the constant in `\App\Member`
+        },
+        errors: [],
+      }
+    },
+    computed: {
+      panelHeading () {
+        return  this.mode === 'create' ? 'Register' : 'Edit'
+      },
+      action () {
+        return  this.mode === 'create' ? 'store' : 'update'
+      }
+    },
     methods: {
+      addTeam (team) {
+        if (this.member.teams.every(t => t.id !== team.id)) {
+          this.member.teams.push(team)
+        }
+      },
+      removeTeam (team) {
+        let ind = this.member.teams.findIndex(t => t.id === team.id)
+        this.member.teams.splice(ind, 1)
+      },
       submit () {
         let self = this
 
-        axios.post('/members', self.member)
-          .then(function (response) {
-            // TODO
-            alert("succeeed")
+        let promise = this.mode === 'create' ?
+          axios.post('/members', self.member) :
+          axios.put('/members/' + self.member.id, self.member)
+
+        promise.then(function (response) {
+            self.$emit(self.action)
+            self.$emit('roll', 'prompt', {
+                type:'success',
+                title:'Succeed',
+                message: ''
+              })
           })
           .catch(function (error) {
             if (error.response.status === 422){
@@ -132,6 +158,11 @@
             } else {
               console.log("Unknown error happens!")
               console.log(error.response.data)
+              self.$emit('roll', 'prompt', {
+                type:'danger',
+                title:'Unknow Error happens',
+                message: error.response.statusText + '. Please contact site attendant'
+              })
             }
           })
       },

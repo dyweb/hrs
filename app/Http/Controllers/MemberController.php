@@ -49,7 +49,7 @@ class MemberController extends Controller
      * many-to-many relationship between `Member` and `Team`
      *
      * Data given by frontend will contain a extra 'teams' fields
-     * which makes '$member->fill($request->all())' failed 
+     * which makes '$member->fill($request->all())' failed
      * and need extra codes to process.
      *
      * This is function need to be static because `EnrollController` also utilize it
@@ -58,7 +58,7 @@ class MemberController extends Controller
      */
     public static function saveMember(Member $member, array $data)
     {
-        if (isset($data['teams'])) { 
+        if (isset($data['teams'])) {
             $teams = $data['teams'];
             unset($data['teams']);
         } else {
@@ -67,7 +67,7 @@ class MemberController extends Controller
 
         // TODO: transaction
         foreach ($teams as $team) {
-            $member->teams()->attach($team->id);    
+            $member->teams()->attach($team->id);
         }
 
         $member->fill($data);

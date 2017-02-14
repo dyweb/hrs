@@ -58,7 +58,7 @@
       :allColumns="allColumns"
       :fixedColumns="fixedColumns"
       :showedColumns="showedColumns"
-      :formatters="formatters"
+      :format="format"
       :data="membersToDisplay"
       @dataClick="showProfile"
     ></huge-table>
@@ -72,7 +72,7 @@
       members: Array,
       teams: Array,
       allColumns: Array,
-      formatters: Object,
+      format: Function,
       allowCreate: Boolean
     },
     data () {

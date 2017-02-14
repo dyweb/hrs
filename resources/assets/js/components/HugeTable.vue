@@ -52,19 +52,11 @@
         type: Array,  // Array of Object
         required: true
       },
-      formatters: {
-        type: Object,  
-        default () {
-          return {
-            foo: (val) => (val.toUpperCase()) // demo 
-          }
+      format: {
+        type: Function,
+        default (name, val) {
+          return val
         }
-      }
-    },
-    methods: {
-      format (name, val) {
-        let func = this.formatters[name]
-        return func ? func(val) : val
       }
     }
   }

@@ -61,7 +61,7 @@
     props: {  
       member: Object,
       memberProps: Array,
-      formatters: Object,
+      format: Function,
       allowEdit: {
         type: Boolean,
         default: false
@@ -93,27 +93,25 @@
           let self = this
 
           axios.delete('/members/' + this.member.id)
-            .then(function (resp) {
+            .then(function (response) {
+              self.$emit('delete')
               self.$emit('roll', 'prompt', {
-                type:'success',
-                title:'Deletion Succeed'
+                type: 'success',
+                title: 'Deletion Succeed',
+                message: ''
               })
             })
-            .catch(function (err) {
-              console.log(err)
-              console.log(err.response.data)
+            .catch(function (error) {
+              console.log(error)
+              console.log(error.response.data)
               self.$emit('roll', 'prompt', {
                 type:'danger',
                 title:'Deletion Failed',
-                message: err.response.statusText + '. Please contact site attendant'
+                message: error.response.statusText + '. Please contact site attendant'
               })
             })
         }
       },
-      format (name, val) {
-        let func = this.formatters[name]
-        return func ? func(val) : val
-      }
     }
   }
 </script>
@@ -139,7 +137,7 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
+    height: 150%;
     z-index: 1000; /* more than 999 to override Bootstrap navbar */
     background-color: rgba(0, 0, 0, .7);
     padding-top: 150px;
