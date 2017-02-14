@@ -19,18 +19,21 @@ var app = new Vue({
   data: {
     members: [],
     teams: [],
-    view: 'addressBook'
+    view: 'poster',
+    viewkwargs: {} 
   },
   components: {
     appNavbar: require('./components/Navbar.vue'),
     poster: require('./components/Poster.vue'),
-    empty: require('./components/Empty.vue'),
     addressBook: require('./components/AddressBook.vue'),
     memberForm: require('./components/MemberForm.vue'),
+    profile: require('./components/Profile.vue'),
   },
   methods: {
-    roll (view) {
+    rollView (view, kwargs) {
+      console.assert(typeof kwargs === 'object', "Only `Object` should be passed as `kwargs` in event 'rollView'")
       this.view = view
+      this.viewkwargs = kwargs
     }
   },
   beforeCreate () {
@@ -46,5 +49,11 @@ var app = new Vue({
         if (memberResp.status !== 200) { alert("Failed to get members data") }
         if (teamResp.status !== 200) { alert("Failed to get teams data") }
       }));
+  },
+  created () {
+     ['isGuest', 'isAdmin'].forEach(function (name) {
+      this[name] = window[name]
+      delete window[name]
+     })
   }
 });

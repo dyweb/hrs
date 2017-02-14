@@ -46,6 +46,7 @@
       :fixedColumns="fixedColumns"
       :showedColumns="showedColumns"
       :data="membersToDisplay"
+      @dataClick="showProfile"
     ></huge-table>
 
   </div>
@@ -59,7 +60,7 @@
         allColumns: [
           'name', 'email', 'nickname', 'gender', 'birthday', 
           'qq', 'phone', 'stdId', 'grade', 'department',
-          'GitTq', 'GitHub','QA', 'remark'
+          'GitTq', 'GitHub','QA', 'remark', 'id'
         ],
         fixedBools: [],  // calced when mounted to avoid hardcoding a long bool array
         showedBools: [],
@@ -71,7 +72,7 @@
       this.showedBools = this.toBools([
           'name', 'email', 'gender', 'birthday', 
           'qq', 'phone', 'stdId', 'grade', 'department',
-          'GitTq', 'GitHub','QA', 'remark'
+          'GitTq', 'GitHub','QA', 'remark', 'id'
         ])
     },
     computed: {
@@ -104,6 +105,9 @@
           let otherTypeOfCols = (cols === this.showedBools ? this.fixedBools : this.showedBools)
           Vue.set(otherTypeOfCols, ind, false)
         }
+      },
+      showProfile (ind) {
+        this.$emit('roll', 'profile', { member: this.membersToDisplay[ind] })
       }
     },
     components: {
@@ -116,6 +120,5 @@
   .table-menu {
     text-align: right;
   }
-
 </style>
 

@@ -8,7 +8,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="d in data">
+          <tr v-for="(d, ind) in data" @click="$emit('dataClick', ind)">
             <td v-for="col in fixedColumns">{{ d[col] }}</td>
           </tr>
         </tbody>
@@ -22,8 +22,8 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="d in data">
-              <td v-for="col in showedColumns">{{ d[col] }}</td>
+            <tr v-for="(d, ind) in data" @click="$emit('dataClick', ind)">
+              <td v-for="col in showedColumns"> {{ d[col] }}</td>
             </tr>
           </tbody>
         </table>
