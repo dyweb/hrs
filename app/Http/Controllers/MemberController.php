@@ -158,6 +158,6 @@ class MemberController extends Controller
     public function destroy($id)
     {
         Member::destroy($id);
-        return redirect()->route('members.index');
+        return response('Succeed', 200);
     }
 }

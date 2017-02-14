@@ -30,7 +30,7 @@ const app = new Vue({
     },
     teams: [],
 
-    view: 'poster',
+    view: 'addressBook',
     viewkwargs: {}
   },
   components: {

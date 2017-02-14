@@ -28,7 +28,7 @@
       },
       message: {
         type: String,
-        default: 'Here goes some prompt'
+        default: ''
       }
     }
   }

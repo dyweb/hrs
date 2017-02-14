@@ -11,15 +11,21 @@
     <poster v-if="view == 'poster'"> </poster>
     
     <address-book v-if="view == 'addressBook'"
-      :members="members" :teams="teams" :all-columns="memberProps" :formatters="memberFormatters"
+      :members="members"
+      :teams="teams"
+      :all-columns="memberProps"
+      :formatters="memberFormatters"
+      :allow-create="isAdmin"
+      @roll="rollView"
     > 
     </address-book>
 
     <profile v-if="view == 'profile'"
-      :member="viewkwarg.member" 
-      :allowEdit="isAdmin"  
-      {{-- TODO: if it's user's profile, he should also be authorized --}}
-      :allowDelete="isAdmin"
+      :member="viewkwargs.member"
+      :member-props="memberProps"
+      :formatters="memberFormatters"
+      :allow-edit="isAdmin || viewkwargs.member.id === user.member.id"
+      :allow-delete="isAdmin"
     >
   {{-- </transition> --}}
 </div>

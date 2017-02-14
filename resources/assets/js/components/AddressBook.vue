@@ -1,7 +1,10 @@
 <template>
   <div class="container">
 
+    <!-- Table menu -->
     <div class="table-menu text-right form-group">
+
+      <!-- Team filter -->
       <div class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" 
         aria-haspopup="true" aria-expanded="false">
@@ -21,8 +24,9 @@
             </label>
           </a></li>
         </ul>
-      </div>     
+      </div>
 
+      <!-- Toggle columns -->
       <div v-for="(cols, ind) in [fixedBools, showedBools]" class="btn-group">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" 
         aria-haspopup="true" aria-expanded="false">
@@ -37,6 +41,15 @@
           </a></li>
         </ul>
       </div>
+
+      <!-- Create new member -->
+      <div v-if="allowCreate" class="btn-group">
+        <button type="button" class="btn btn-default"
+          @click="showCreate"
+        >
+          New
+        </button>
+      </div> 
 
     </div>
 
@@ -55,7 +68,13 @@
 
 <script>
   export default {
-    props: ['members', 'teams', 'allColumns', 'formatters'],
+    props: {
+      members: Array,
+      teams: Array,
+      allColumns: Array,
+      formatters: Object,
+      allowCreate: Boolean
+    },
     data () {
       return {
         fixedBools: [],   // Tow boolean array representing a column's display state
@@ -104,6 +123,9 @@
       },
       showProfile (ind) {
         this.$emit('roll', 'profile', { member: this.membersToDisplay[ind] })
+      },
+      showCreate () {
+        this.$emit('roll', 'create')
       }
     },
     components: {
