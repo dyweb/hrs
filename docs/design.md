@@ -39,3 +39,13 @@ Preserve the account after one's leaving from Dongyue.
 * `Member` can possess different positions in different `Team` 
 * positions includes *president*, *leader* and *member* 
 * `Team` can has one or more than one *leader*
+
+### Frontend
+
+`Vue` is used for frontend.
+
+Before one's login, pages are renderred by blade, and after by `Vue`.
+
+The `Vue` is totally drived by js, only ajax the backend for data update.
+
+
