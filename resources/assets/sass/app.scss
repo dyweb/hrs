@@ -25,6 +25,10 @@
   }  
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 .view-enter-active, .view-leave-active {
   transition: opacity .3s ease;
 }

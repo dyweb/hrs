@@ -8,7 +8,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(d, ind) in data" @click="$emit('dataClick', ind)">
+          <tr v-for="(d, ind) in data" @click="$emit('dataClick', ind)" class="clickable">
             <td v-for="col in fixedColumns">{{ format(col, d[col]) }}</td>
           </tr>
         </tbody>
@@ -22,7 +22,7 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(d, ind) in data" @click="$emit('dataClick', ind)">
+            <tr v-for="(d, ind) in data" @click="$emit('dataClick', ind)" class="clickable">
               <td v-for="col in showedColumns"> {{ format(col, d[col]) }}</td>
             </tr>
           </tbody>

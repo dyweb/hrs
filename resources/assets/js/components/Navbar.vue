@@ -12,7 +12,7 @@
         </button>
 
         <!-- Branding Image -->
-        <a class="navbar-brand" @click.prevent="$emit('roll', 'poster')">
+        <a class="navbar-brand clickable" @click.prevent="$emit('roll', 'poster')">
           Dongyue HR
         </a>
       </div>
@@ -20,8 +20,9 @@
       <div class="collapse navbar-collapse" id="app-navbar-collapse">
         <!-- Left Side Of Navbar -->
         <ul class="nav navbar-nav">
-          <li><a href="#" @click.prevent="$emit('roll', 'poster')">Teams</a></li>
-          <li><a href="#" @click.prevent="$emit('roll', 'addressBook')">Members</a></li>
+          <li><a href="#" @click.prevent="$emit('roll', 'teams')">Teams</a></li>
+          <li><a href="#" @click.prevent="$emit('roll', 'members')">Members</a></li>
+          <li v-if="isAdmin"><a href="#" @click.prevent="$emit('roll', 'enroll')">Enroll</a></li>
         </ul>
 
         <!-- Right Side Of Navbar -->
@@ -40,7 +41,7 @@
                 </a>
 
                 <form id="logout-form" action="/logout" method="POST" hidden>
-                  <slot name="csrf-field"></slot> csrf_field() }}
+                  <slot name="csrf-field"></slot> 
                 </form>
               </li>
             </ul>
@@ -51,3 +52,9 @@
     </div>
   </nav>
 </template>
+
+<script>
+  export default {
+    props: ['isAdmin']
+  }
+</script>

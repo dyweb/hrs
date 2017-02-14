@@ -18,7 +18,7 @@ const app = new Vue({
   el: '#app',
   data: {
     members: [],
-    memberProps: [
+    memberProps: [ // all props that can be displayed
       'id', 'name', 'email', 'nickname', 'gender', 'birthday', 
       'qq', 'phone', 'stdId', 'grade', 'department',
       'GitTq', 'GitHub','QA', 'remark', 'created_at',
@@ -35,8 +35,8 @@ const app = new Vue({
     },
     teams: [],
 
-    view: 'addressBook',
-    viewkwargs: {}
+    view: 'poster', // the variable controlling the current view
+    viewkwargs: {}   // the Object that one component want to pass to another
   },
   components: {
     prompt: require('./components/Prompt.vue'),
@@ -47,6 +47,7 @@ const app = new Vue({
     profile: require('./components/Profile.vue'),
   },
   methods: {
+    // change the current view 
     rollView (view, kwargs) {
       this.view = view
       if ( kwargs ) {
@@ -55,10 +56,12 @@ const app = new Vue({
         this.viewkwargs = _.cloneDeep(kwargs)
       }
     },
+    // function used to format data to be displayed
     format (name, val) {
         let func = this.memberFormatters[name]
         return func ? func(val) : val
     },
+    // get members from backend
     refreshMembers () {
       let self = this
 
@@ -68,6 +71,7 @@ const app = new Vue({
           if (resp.status !== 200) { console.log("Failed to refresh members data") }
         });
     },
+    // get team from backend
     refreshTeams () {
       let self = this
       axios.get('/teams')
