@@ -22,7 +22,7 @@ class ReCreateUsersTable extends Migration
             $table->timestamps();
 
             $table->string('email')->unique(); 
-            $table->foreign('email')->references('email')->on('members');  
+            $table->foreign('email')->references('email')->on('members')->onDelete('cascade');
         });
     }
 

@@ -36,22 +36,7 @@ class EnrollController extends Controller
     public function store(Request $request)
     {
         MemberController::validator($request->all())->validate();
-
-        $member = new Member;
-
-        if (isset($request['teamsId'])){ 
-            $teamsId = $request['teamsId'];
-            unset($request['teamsId']);
-        } else {
-            $teamsId = [];
-        }
-
-        $member->fill($request->all());
-        $member->save();
-        
-        foreach ($teamsId as $tid){
-            $member->teams()->attach($tid);    
-        }
+        MemberController::saveMember(new Member, $request->all());
 
         return view('enroll.success');
     }

@@ -37,8 +37,43 @@ class MemberController extends Controller
             'GitHub' => 'required',
             'QA' => 'required',
             'remark' => 'required',
+            'teams' => 'sometimes|array',
         ]);
         // TODO: some should be given a default value?
+    }
+
+
+    /**
+     * Edit the given Member instance according to the given data.
+     * The necessity of this function comes from the
+     * many-to-many relationship between `Member` and `Team`
+     *
+     * Data given by frontend will contain a extra 'teams' fields
+     * which makes '$member->fill($request->all())' failed 
+     * and need extra codes to process.
+     *
+     * This is function need to be static because `EnrollController` also utilize it
+     * @param  \App\Models\Member  $member
+     * @return array $data
+     */
+    public static function saveMember(Member $member, array $data)
+    {
+        if (isset($data['teams'])) { 
+            $teams = $data['teams'];
+            unset($data['teams']);
+        } else {
+            $teams = [];
+        }
+
+        // TODO: transaction
+        foreach ($teams as $team) {
+            $member->teams()->attach($team->id);    
+        }
+
+        $member->fill($data);
+        $member->save();
+
+        return $member;
     }
 
     /**
@@ -72,7 +107,7 @@ class MemberController extends Controller
      */
     public function create()
     {
-        return view('create');
+        //
     }
 
     /**
@@ -87,24 +122,10 @@ class MemberController extends Controller
      */
     public function store(Request $request)
     {
+        // TODO: add etag check
         $this->validator($request->all())->validate();
 
-        $member = new Member;
-
-        if (isset($request['teamsId'])){ 
-            $teamsId = $request['teamsId'];
-            unset($request['teamsId']);
-        } else {
-            $teamsId = [];
-        }
-
-        $member->fill($request->all());
-        $member->save();
-        
-        foreach ($teamsId as $tid){
-            $member->teams()->attach($tid);    
-        }
-
+        $this->saveMember(new Member, $request->all());
 
         return response('Succeeded', 200);
     }
@@ -117,8 +138,7 @@ class MemberController extends Controller
      */
     public function show($id)
     {   
-        $member = Member::findOrFail($id);
-        return view('show', ['member' => $member]);
+        //
     }
 
     /**
@@ -129,8 +149,7 @@ class MemberController extends Controller
      */
     public function edit($id)
     {
-        $member = Member::findOrFail($id);
-        return view('edit', ['member' => $member]);
+        //
     }
 
     /**
@@ -142,11 +161,10 @@ class MemberController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $member = Member::findOrFail($id);
-        $member->fill($request->all());
-        $member->save();
+        // TODO: add etag check
+        $this->saveMember(Member::findOrFail($id), $request->all());
 
-        return redirect()->route('members.index');
+        return response('Succeeded', 200);
     }
 
     /**
